@@ -19,21 +19,25 @@ const PESSOAS = [
       → comece em modo de teste (ajustamos as regras depois).
    3. Vá em Configurações do projeto (ícone de engrenagem) → Geral →
       "Seus apps" → ícone </> (Web) → registre o app.
-   4. O Firebase mostra um objeto "firebaseConfig" — copie os valores
-      dele para a constante FIREBASE_CONFIG logo abaixo.
+   4. O Firebase mostra um objeto "firebaseConfig" — copie SÓ OS
+      VALORES dele (apiKey, authDomain, etc.) para dentro dos campos
+      abaixo. NÃO troque o nome "FIREBASE_CONFIG" pelo nome que o
+      Firebase usa ("firebaseConfig", minúsculo) — o resto do código
+      espera exatamente esse nome, em maiúsculas. Troque só o que
+      está escrito "COLE_AQUI".
    5. Em Realtime Database → Regras, cole:
         { "rules": { ".read": true, ".write": true } }
       (sem login pra simplificar — ok pra um app de 3 amigos, mas
       qualquer pessoa com o link do site consegue escrever dados).
 */
 const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyDrymkBS-SAlNl32ujHJ4veK9B-8r3Y4hU",
-    authDomain: "rachadinha-c3907.firebaseapp.com",
-    databaseURL: "https://rachadinha-c3907-default-rtdb.firebaseio.com",
-    projectId: "rachadinha-c3907",
-    storageBucket: "rachadinha-c3907.firebasestorage.app",
-    messagingSenderId: "37555514703",
-    appId: "1:37555514703:web:963f6b22338bdde521293a"
+  apiKey:            "COLE_AQUI",
+  authDomain:        "COLE_AQUI",
+  databaseURL:       "COLE_AQUI",
+  projectId:         "COLE_AQUI",
+  storageBucket:     "COLE_AQUI",
+  messagingSenderId: "COLE_AQUI",
+  appId:             "COLE_AQUI",
 };
 
 let dbRefCorridas    = null;
@@ -697,7 +701,7 @@ function inicializarDados() {
 
   // limpar tudo
   document.getElementById('btn-limpar').addEventListener('click', () => {
-    if (!confirm('Apagar TODAS as corridas? Essa ação não pode ser desfeita.')) return;
+    if (!confirm('Apagar TODAS as corridas — do Mateus, Sorriso e Caio? Essa ação não pode ser desfeita.')) return;
     if (!firebaseConfigOk) return mostrarToast('⚠️ Firebase não configurado.');
     dbRefCorridas.remove()
       .then(() => mostrarToast('🗑️ Todos os dados foram apagados.'))

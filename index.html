@@ -131,22 +131,23 @@
         </section>
 
         <!-- ===== SEUS DADOS ===== -->
-        <!--
-          Seção oculta: era usada para exportar/importar JSON manualmente
-          entre os celulares (modelo "cada um no seu navegador").
-          Mantida no código, só escondida via classe .secao-oculta no
-          style.css, para o dia em que for útil de novo (backup avulso,
-          depuração, etc). Pra reexibir, remova a classe "secao-oculta"
-          abaixo ou apague a regra correspondente no CSS.
-        -->
-        <section class="cartao cartao--dados secao-oculta" aria-labelledby="titulo-dados">
+        <section class="cartao cartao--dados" aria-labelledby="titulo-dados">
           <h2 class="cartao__titulo" id="titulo-dados">Seus dados</h2>
           <p class="texto-discreto">
-            Os registros ficam salvos neste navegador. Para cruzar com os do Sorriso ou do Caio,
-            exporte o seu JSON e quem for fechar a conta importa os três arquivos.
+            Os registros são compartilhados em tempo real entre Mateus, Sorriso e Caio.
+            Limpar tudo apaga o histórico pra todo mundo, não só neste celular.
           </p>
           <div class="botoes-dados">
-            <button class="botao botao--secundario" id="btn-exportar" type="button" data-test="btn-exportar">
+            <!--
+              Exportar/Importar ficam ocultos: eram usados no modelo antigo
+              (cada um salvando local e juntando os JSONs depois). Com o
+              Firebase compartilhado não são mais necessários no dia a dia,
+              mas o código continua funcionando — útil pra um backup avulso
+              ou pra migrar dados antigos. Pra reexibir, remova a classe
+              "secao-oculta" dos dois botões abaixo (ou apague a regra
+              correspondente no style.css).
+            -->
+            <button class="botao botao--secundario secao-oculta" id="btn-exportar" type="button" data-test="btn-exportar">
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
                    fill="none" stroke="currentColor" stroke-width="2"
                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -156,7 +157,7 @@
               </svg>
               Exportar dados
             </button>
-            <button class="botao botao--secundario" id="btn-importar" type="button" data-test="btn-importar">
+            <button class="botao botao--secundario secao-oculta" id="btn-importar" type="button" data-test="btn-importar">
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
                    fill="none" stroke="currentColor" stroke-width="2"
                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -177,7 +178,7 @@
               </svg>
               Limpar tudo
             </button>
-            <input type="file" id="input-importar" accept=".json" class="visualmente-oculto" data-test="input-importar">
+            <input type="file" id="input-importar" accept=".json" class="visualmente-oculto secao-oculta" data-test="input-importar">
           </div>
         </section>
 
