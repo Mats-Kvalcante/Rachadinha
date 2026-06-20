@@ -26,7 +26,7 @@ const PESSOAS = [
       (sem login pra simplificar — ok pra um app de 3 amigos, mas
       qualquer pessoa com o link do site consegue escrever dados).
 */
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
     apiKey: "AIzaSyDrymkBS-SAlNl32ujHJ4veK9B-8r3Y4hU",
     authDomain: "rachadinha-c3907.firebaseapp.com",
     databaseURL: "https://rachadinha-c3907-default-rtdb.firebaseio.com",
