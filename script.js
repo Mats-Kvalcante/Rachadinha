@@ -31,13 +31,13 @@ const PESSOAS = [
       qualquer pessoa com o link do site consegue escrever dados).
 */
 const FIREBASE_CONFIG = {
-  apiKey:            "COLE_AQUI",
-  authDomain:        "COLE_AQUI",
-  databaseURL:       "COLE_AQUI",
-  projectId:         "COLE_AQUI",
-  storageBucket:     "COLE_AQUI",
-  messagingSenderId: "COLE_AQUI",
-  appId:             "COLE_AQUI",
+    apiKey: "AIzaSyDrymkBS-SAlNl32ujHJ4veK9B-8r3Y4hU",
+    authDomain: "rachadinha-c3907.firebaseapp.com",
+    databaseURL: "https://rachadinha-c3907-default-rtdb.firebaseio.com",
+    projectId: "rachadinha-c3907",
+    storageBucket: "rachadinha-c3907.firebasestorage.app",
+    messagingSenderId: "37555514703",
+    appId: "1:37555514703:web:963f6b22338bdde521293a"
 };
 
 let dbRefCorridas    = null;
