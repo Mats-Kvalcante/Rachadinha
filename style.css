@@ -899,6 +899,12 @@ body {
 
   .botoes-dados .botao { width: 100%; }
 
+  .cartao__cabecalho {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
   .campo--mes {
     min-width: 100%;
   }
