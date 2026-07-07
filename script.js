@@ -41,13 +41,15 @@ const FIREBASE_CONFIG = {
 };
 
 let dbRefCorridas    = null;
+let dbRefPagamentos  = null;
 let dadosCarregados  = false;
 let firebaseConfigOk = false;
 
 /* ===================================================
    ESTADO
    =================================================== */
-let corridas = [];
+let corridas   = [];
+let pagamentos = {}; // chave: "de__para" → { confirmado: true, data: "YYYY-MM-DD" }
 
 /* ===================================================
    UTILITÁRIOS
@@ -95,7 +97,8 @@ function inicializarFirebase() {
   }
 
   firebase.initializeApp(FIREBASE_CONFIG);
-  dbRefCorridas = firebase.database().ref('corridas');
+  dbRefCorridas   = firebase.database().ref('corridas');
+  dbRefPagamentos = firebase.database().ref('pagamentos');
 
   // dispara toda vez que algo muda no banco — seja por este celular
   // ou pelo do Sorriso/Caio — e atualiza a tela na hora
@@ -110,6 +113,12 @@ function inicializarFirebase() {
   }, erro => {
     console.error(erro);
     mostrarToast('⚠️ Sem conexão com o banco de dados. Verifique as regras do Firebase.');
+  });
+
+  // pagamentos confirmados — sincroniza em tempo real igual às corridas
+  dbRefPagamentos.on('value', snapshot => {
+    pagamentos = snapshot.val() || {};
+    if (dadosCarregados) renderizarTudo();
   });
 }
 
@@ -426,6 +435,22 @@ function renderizarSaldos(saldos) {
 /* ===================================================
    RENDERIZAR ACERTOS
    =================================================== */
+/* ===================================================
+   CONFIRMAR PAGAMENTO
+   Chave: "de__para" — salva no nó /pagamentos do Firebase
+   Clicar de novo desfaz a confirmação
+   =================================================== */
+function togglePagamento(chave) {
+  if (!firebaseConfigOk) return mostrarToast('⚠️ Firebase não configurado.');
+  const ref = firebase.database().ref(`pagamentos/${chave}`);
+  if (pagamentos[chave]) {
+    ref.remove().catch(() => mostrarToast('⚠️ Não foi possível atualizar. Tente novamente.'));
+  } else {
+    ref.set({ confirmado: true, data: new Date().toISOString().slice(0, 10) })
+       .catch(() => mostrarToast('⚠️ Não foi possível atualizar. Tente novamente.'));
+  }
+}
+
 function renderizarAcertos(acertos) {
   const lista = document.getElementById('lista-acertos');
   lista.innerHTML = '';
@@ -446,8 +471,11 @@ function renderizarAcertos(acertos) {
     const pPara = pessoaPorId(a.para);
     if (!pDe || !pPara) return;
 
+    const chave = `${a.de}__${a.para}`;
+    const pago  = !!pagamentos[chave];
+
     const rota = document.createElement('div');
-    rota.className = 'rota-acerto';
+    rota.className = `rota-acerto${pago ? ' rota-acerto--pago' : ''}`;
     rota.setAttribute('data-test', `rota-acerto-${idx}`);
 
     // — quem deve (esquerda)
@@ -483,7 +511,20 @@ function renderizarAcertos(acertos) {
     nomePara.textContent = pPara.nome;
     pessoaPara.append(iniPara, nomePara);
 
-    rota.append(pessoaDe, caminho, pessoaPara);
+    // — botão de confirmação de pagamento
+    const btnPago = document.createElement('button');
+    btnPago.className = `botao-confirmar-pago${pago ? ' botao-confirmar-pago--ativo' : ''}`;
+    btnPago.setAttribute('aria-label', pago
+      ? `Desfazer: ${pDe.nome} pagou ${pPara.nome}`
+      : `Confirmar: ${pDe.nome} pagou ${pPara.nome}`);
+    btnPago.setAttribute('title', pago ? 'Desfazer confirmação' : 'Confirmar pagamento');
+    btnPago.setAttribute('data-test', `btn-pago-${chave}`);
+    btnPago.innerHTML = pago
+      ? /* ícone de desfazer (X) */ `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+      : /* ícone de check */ `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
+    btnPago.addEventListener('click', () => togglePagamento(chave));
+
+    rota.append(pessoaDe, caminho, pessoaPara, btnPago);
     lista.appendChild(rota);
   });
 }

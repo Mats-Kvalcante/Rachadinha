@@ -568,13 +568,71 @@ body {
 
 .rota-acerto {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto; /* +coluna pro botão de confirmação */
   align-items: center;
   gap: clamp(8px, 2vw, 10px);
   padding: clamp(10px, 2vw, 12px) clamp(12px, 3vw, 14px);
   background: var(--cor-fundo-1);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-md);
+  transition: opacity .25s;
+}
+
+/* estado: pagamento confirmado */
+.rota-acerto--pago {
+  opacity: .55;
+}
+
+.rota-acerto--pago .rota-acerto__valor {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  color: var(--cor-texto-discreto);
+}
+
+.rota-acerto--pago .rota-acerto__caminho {
+  border-top-color: var(--cor-borda);
+}
+
+.rota-acerto--pago .rota-acerto__caminho::after {
+  border-color: transparent transparent transparent var(--cor-borda);
+}
+
+.rota-acerto--pago .rota-acerto__pessoa {
+  color: var(--cor-texto-discreto);
+}
+
+/* botão de confirmar/desfazer pagamento */
+.botao-confirmar-pago {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--raio-full);
+  border: 1.5px solid var(--cor-borda);
+  background: transparent;
+  color: var(--cor-texto-discreto);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color .15s, background .15s, color .15s;
+}
+
+.botao-confirmar-pago:hover {
+  border-color: var(--cor-positivo);
+  background: rgba(80, 202, 128, .1);
+  color: var(--cor-positivo);
+}
+
+.botao-confirmar-pago--ativo {
+  border-color: var(--cor-positivo);
+  background: rgba(80, 202, 128, .12);
+  color: var(--cor-positivo);
+}
+
+.botao-confirmar-pago--ativo:hover {
+  border-color: var(--cor-negativo);
+  background: rgba(240, 120, 120, .1);
+  color: var(--cor-negativo);
 }
 
 .rota-acerto__pessoa {
